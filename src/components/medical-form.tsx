@@ -334,23 +334,29 @@ export function MedicalFormComponent() {
     if(currentLocation != null){
       if (isFormValid()[currentLocation]) {
         console.log("Form data:", formData)
-        toast({
-          title: "Form data saved",
-          description: "You can go back and make changes.",
-        })
         if(api && currentLocation+1 < api?.scrollSnapList().length){
           api?.scrollNext();
+          toast({
+            title: "Form data saved",
+            description: "You can go back and make changes.",
+          })
         } else {
-          fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+          fetch('https://script.google.com/macros/s/AKfycbwjIjWU4LzlsaIKb435wWNDp5glkxgueqBeIr2o0ViWFzsl6xNaW57mxm-MgtF5Ng/exec', {
+            redirect: "follow",
             method: 'POST',
+            mode:"no-cors",
+            body: JSON.stringify(formData),
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "text/plain;charset=utf-8",
             },
-            body: JSON.stringify(formData),  // Envía el formData como JSON
           })
             .then(response => response.text())
             .then(data => {
               console.log('Data saved:', data);
+              toast({
+                title: "Form data submitted",
+                description: "The form data has been successfully submitted.",
+              })
             })
             .catch(error => {
               console.error('Error:', error);
